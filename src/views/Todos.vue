@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto">
     <div class="flex justify-center items-center py-10 my-5">
-      <div class="p-8 bg-green-300 shadow-md rounded w-fit">
+      <div class="p-8 bg-green-400 shadow-md rounded w-fit">
         <h2 class="text-xl text-center text-white">Add a task</h2>
         <input
           v-model="todoText"
@@ -20,7 +20,7 @@
       <div
         v-for="(todo, index) in todos"
         :key="index"
-        :class="{'bg-green-100': todo.done}"
+        :class="{ 'bg-green-100': todo.done }"
         class="
           p-8
           mx-2
@@ -35,27 +35,32 @@
       >
         <div class="container mx-auto">
           <div>{{ todo.text }}</div>
-          <div class="text-gray-500 text-sm">{{ todo.createdAt.toString() }}
+          <div class="text-gray-500 text-sm">
+            {{ todo.createdAt.toString() }}
           </div>
         </div>
         <div class="flex">
-          <button 
-            class="px-6 text-red-400" 
-            title="Remove todo">
+          <button
+            @click="removeTodo(index)"
+            class="px-6 text-red-400"
+            title="Remove todo"
+          >
             <i class="fas fa-trash"></i>
           </button>
-          <button 
+          <button
             v-if="!todo.done"
-            @click="markAsDone(index)" 
-            class="px-2 text-green-400" 
-            title="Mark as done">
+            @click="markAsDone(index)"
+            class="px-2 text-green-400"
+            title="Mark as done"
+          >
             <i class="fas fa-check"></i>
           </button>
-          <button 
+          <button
             v-else
             @click="markAsUndone(index)"
-            class="px-2 text-yellow-400" 
-            title="Mark as undone">
+            class="px-2 text-yellow-400"
+            title="Mark as undone"
+          >
             <i class="fas fa-undo"></i>
           </button>
         </div>
@@ -106,12 +111,22 @@ export default defineComponent({
       todos[index].done = false;
     }
 
+    function removeTodo(index) {
+      if (!confirm("Are you sure you want to delete this task?")) {
+        return;
+      }
+
+      todos.splice(index, 1);
+      alert('Task deleted.');
+    }
+
     return {
       todos,
       todoText,
       addTodo,
       markAsDone,
       markAsUndone,
+      removeTodo,
     };
   },
 });
